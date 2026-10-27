@@ -61,7 +61,14 @@ class Shop extends Model
 
     public static function defaultAppearance(): array
     {
-        return ['theme' => 'minimal', 'accent' => '#b93828', 'tagline' => 'Una selección hecha para vos'];
+        return ['style' => 'casa', 'theme' => 'minimal', 'accent' => '#b34b35', 'tagline' => 'Una selección hecha para vos'];
+    }
+
+    public function currentStyle(): string
+    {
+        $style = $this->appearance_draft['style'] ?? $this->appearance['style'] ?? null;
+
+        return array_key_exists((string) $style, config('cataloguito.styles')) ? $style : 'casa';
     }
 
     public function logoUrl(): ?string

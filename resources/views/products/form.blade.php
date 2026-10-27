@@ -17,14 +17,13 @@
                         placeholder="Materiales, medidas, detalles que lo hacen especial…">{{ old('description', $product->description) }}</textarea>
                 </div>
                 <div class="form-grid">
-                    <div class="field"><label for="price">Precio en pesos</label><input name="price"
+                    <div class="field"><label for="price">Precio en pesos</label><span class="money-field"><b>$</b><input name="price"
                             id="price" value="{{ old('price', \App\Support\Money::input($product->price_minor)) }}"
-                            inputmode="decimal" required placeholder="12500"><small class="field-help">Sin puntos de
-                            miles. Ejemplo: 12500,50.</small></div>
+                            inputmode="decimal" required placeholder="12.500"></span><small class="field-help">Podés escribir 12500 o 12.500. Los centavos se separan con coma.</small></div>
                     <div class="field"><label for="previous_price">Precio anterior
-                            <small>opcional</small></label><input name="previous_price" id="previous_price"
+                            <small>opcional</small></label><span class="money-field"><b>$</b><input name="previous_price" id="previous_price"
                             value="{{ old('previous_price', \App\Support\Money::input($product->previous_price_minor)) }}"
-                            inputmode="decimal" placeholder="Solo si hay una rebaja real"></div>
+                            inputmode="decimal" placeholder="15.000"></span></div>
                 </div>
             </section>
             <section class="form-section">
@@ -57,7 +56,7 @@
         <aside class="stack">
             <div class="card card-padding" x-data="imagePreview(@js($product->media?->url()))">
                 <h2 style="margin-bottom:18px">La primera impresión</h2><template x-if="url"><img
-                        :src="url" alt="Vista previa de la foto" class="photo-preview"></template>
+                        :src="url" alt="Vista previa de la foto" class="photo-preview" width="640" height="640"></template>
                 <div class="photo-preview" x-show="!url"><x-icon name="image" :size="45" /></div>
                 <div class="field"><label for="image">Foto principal</label><input type="file" name="image"
                         id="image" accept="image/jpeg,image/png,image/webp" @change="select"><small

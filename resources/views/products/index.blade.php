@@ -52,10 +52,10 @@
                                     x-data="quickPrice(@js(route('products.quick', $product->public_id)), @js(\App\Support\Money::input($product->price_minor)), {{ $product->version }})" @submit.prevent="save">@csrf @method('PATCH')<div
                                         class="quick-price"><label class="sr-only"
                                             for="price-{{ $product->id }}">Precio de
-                                            {{ $product->name }}</label><input id="price-{{ $product->id }}"
+                                            {{ $product->name }}</label><span class="money-field compact"><b>$</b><input id="price-{{ $product->id }}"
                                             name="price" x-model="price"
                                             value="{{ \App\Support\Money::input($product->price_minor) }}"
-                                            inputmode="decimal" required><input type="hidden" name="version"
+                                            inputmode="decimal" required></span><input type="hidden" name="version"
                                             value="{{ $product->version }}"><button :disabled="saving"
                                             aria-label="Guardar precio de {{ $product->name }}"><x-icon name="check"
                                                 :size="16" /></button></div>

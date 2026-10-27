@@ -1,2 +1,1 @@
-<a href="{{ auth()->check() ? route('dashboard') : route('home') }}" class="brand" aria-label="Cataloguito, inicio"><span
-        class="brand-mark"><span></span><span></span><span></span></span>cataloguito<span class="brand-dot">.</span></a>
+<a href="{{ auth()->check() ? route('dashboard') : route('home') }}" class="brand" aria-label="Cataloguito, inicio"><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><path class="brand-mark-bg" d="M6 5.5 20 2l14 3.5v29L20 38 6 34.5z"/><path class="brand-mark-page" d="M10.5 10 20 7.5V31l-9.5-2.2zM29.5 10 20 7.5V31l9.5-2.2z"/><path class="brand-mark-line" d="m13 14 4-1v11.5l-4-.9zm14 0-4-1v11.5l4-.9z"/></svg><span translate="no">cataloguito</span><span class="brand-dot">.</span></a>

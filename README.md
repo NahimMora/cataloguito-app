@@ -57,7 +57,7 @@ La suite backend usa exclusivamente `vitrina_test`, configurada en phpunit.xml. 
 
 Comprobaciones: aislamiento A/B y FKs, imágenes/archivos hostiles, cuotas, edición concurrente, precios alterados/obsoletos, idempotencia, recibo por sesión, estados y fallo/reintento de email. E2E recorre alta→verificación→foto→publicación→precio→pedido→gestión. Incluye análisis automatizado de accesibilidad del catálogo, teclado y capturas móvil/escritorio; no equivale a auditoría WCAG completa ni Core Web Vitals de campo.
 
-Última validación local: **34 pruebas backend (198 aserciones)** y **3 recorridos de navegador** aprobados. Lighthouse móvil de la landing: rendimiento 97, accesibilidad 100, SEO 100 y CLS 0. Son resultados de laboratorio local, no métricas de usuarios reales.
+Última validación local: **35 pruebas backend (205 aserciones)** y **4 recorridos de navegador** aprobados. Lighthouse móvil de la landing: rendimiento 97, accesibilidad 100, SEO 100 y CLS 0. Son resultados de laboratorio local, no métricas de usuarios reales.
 
 `php artisan catalog:backup` crea ZIP privado con SQL, imágenes y hashes; la restauración local se verifica con `scripts/verify-backup.ps1` sobre `vitrina_restore_test`. Transferencia externa cifrada, cron real, SMTP y retención deben configurarse al desplegar. `php artisan catalog:plan tienda pro` habilita un piloto después de conciliación manual; no registra ni verifica un cobro.
 

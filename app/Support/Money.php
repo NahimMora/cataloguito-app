@@ -11,9 +11,15 @@ class Money
         if ($input === null || trim((string) $input) === '') {
             return null;
         }
-        $value = trim((string) $input);
-        if (! preg_match('/^\d{1,9}(?:[.,]\d{1,2})?$/D', $value)) {
-            throw ValidationException::withMessages([$field => 'Ingresá el importe sin separadores de miles (ej. 12500,50).']);
+        $value = preg_replace('/[\s$]/u', '', trim((string) $input));
+        if (preg_match('/^\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?$/D', $value)) {
+            $value = str_replace('.', '', $value);
+            $value = str_replace(',', '.', $value);
+        } elseif (preg_match('/^\d{1,9},\d{1,2}$/D', $value)) {
+            $value = str_replace(',', '.', $value);
+        }
+        if (! preg_match('/^\d{1,9}(?:\.\d{1,2})?$/D', $value)) {
+            throw ValidationException::withMessages([$field => 'Ingresá un precio válido, por ejemplo $ 12.500 o $ 12.500,50.']);
         }
         $parts = explode('.', str_replace(',', '.', $value));
         $minor = ((int) $parts[0]) * 100 + (int) str_pad($parts[1] ?? '', 2, '0');
@@ -31,6 +37,10 @@ class Money
 
     public static function input(?int $minor): string
     {
-        return $minor === null ? '' : sprintf('%d.%02d', intdiv($minor, 100), $minor % 100);
+        if ($minor === null) {
+            return '';
+        }
+
+        return number_format($minor / 100, $minor % 100 ? 2 : 0, ',', '.');
     }
 }

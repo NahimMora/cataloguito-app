@@ -8,7 +8,7 @@ Dirección: **cercanía comercial cotidiana**. Cataloguito usa producto/foto/pre
 
 Paleta de marca: coral profundo `#B93828`, crema `#FFF7EC`, cacao `#321C18` y manteca `#FFD76A`. El dashboard conserva superficies claras para tareas largas. Éxito `#166534` y error `#B91C1C`. Las combinaciones principales se comprobaron con axe/Lighthouse; esto no certifica toda la aplicación. No se adoptaron el verde-crema-mostaza ni la metáfora del toldo de Sucuchito.
 
-Cuerpo: Manrope como candidato; títulos y números de precio de la misma familia para el MVP. Boutique puede sumar Fraunces en fase 2. Evaluar licencia del archivo/fuente concreta antes de distribuir y conservar avisos. WOFF2 local, subconjunto latino con español, pesos necesarios, `font-display: swap` y fallback de métricas semejantes. Sin carga simultánea de todas las fuentes de todos los temas.
+Cuerpo: Manrope variable local; títulos y números de precio de la misma familia para el MVP. Boutique usa Georgia de sistema en títulos editoriales. WOFF2 local, subconjunto latino con español, pesos necesarios y `font-display: optional` para evitar un cambio tardío de métricas en conexiones móviles lentas. Sin carga simultánea de todas las fuentes de todos los temas.
 
 ## Tokens y componentes
 
@@ -36,6 +36,10 @@ No usar dashboards con gráficos sin utilidad ni tarjetas de métricas decorativ
 | Boutique | 4:5, fotografía grande, serif de sistema en títulos | Relato breve, producto protagonista; ropa/belleza/pastelería | Implementado |
 
 Un solo motor de catálogo: variantes de layout y tokens de espaciado/color/fuente/imagen. Comportamientos de precio, disponibilidad, carrito y errores idénticos. No duplicar tres páginas completas con lógica distinta. Boutique no debe enterrar buscador y primeras categorías debajo de varias pantallas de portada.
+
+Los siete presets por rubro —Hilo, Volumen, Aura, Casa, Chispa, Huellas y Dulce— agregan composiciones controladas sobre ese motor común. Cada uno ofrece tres paletas recomendadas y una demo pública completa; no son copias independientes del catálogo. El panel muestra el preset elegido y permite cambiar rubro, color y frase antes de publicar.
+
+El isotipo de Cataloguito representa un catálogo abierto: cubierta cacao, páginas amarillas y dos fichas coral. Debe conservarse como SVG, sin efectos raster ni variaciones improvisadas.
 
 Color del comercio con paletas curadas y selector avanzado acotado; elegir automáticamente texto claro/oscuro o rechazar combinación ilegible. Mantener precio y CTA con contraste adecuado. Preview usa productos propios y estados reales; el botón Publicar diseño aplica solo apariencia.
 

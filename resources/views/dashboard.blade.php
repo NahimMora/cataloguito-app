@@ -10,6 +10,8 @@
             </p><a class="button dark small"
                 href="{{ $counts['products'] ? route('shop.settings') : route('products.create') }}">{{ $counts['products'] ? 'Mi catálogo' : 'Agregar mi primer producto' }}
                 <x-icon name="arrow" :size="15" /></a>
+            @php($currentStyle = $styles[$shop->currentStyle()])
+            <a class="dashboard-style-pill" href="{{ route('shop.settings') }}#estilo"><span style="--style-color:{{ $shop->appearance_draft['accent'] }}"></span><small>Estilo actual</small><strong>{{ $currentStyle['name'] }} · {{ $currentStyle['sector'] }}</strong><x-icon name="edit" :size="14" /></a>
         </div>
         <div class="welcome-art" aria-hidden="true">
             <div class="mini-store">

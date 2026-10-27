@@ -33,10 +33,12 @@ class ShopController extends Controller
         $data['whatsapp'] = Phone::normalizeParts($data['whatsapp_country'], $data['whatsapp_local']);
         unset($data['whatsapp_country'], $data['whatsapp_local']);
         $style = $r->session()->pull('selected_style');
+        $selectedAccent = $r->session()->pull('selected_accent');
         $preset = config('cataloguito.styles.'.$style);
         $appearance = Shop::defaultAppearance();
         if ($preset) {
-            $appearance = ['theme' => $preset['family'], 'accent' => $preset['accent'], 'tagline' => ''];
+            $accent = array_key_exists((string) $selectedAccent, $preset['palettes']) ? $selectedAccent : $preset['accent'];
+            $appearance = ['style' => $style, 'theme' => $preset['family'], 'accent' => $accent, 'tagline' => ''];
         }
         Shop::create($data + ['user_id' => $r->user()->id, 'appearance' => $appearance, 'appearance_draft' => $appearance]);
 
@@ -50,12 +52,14 @@ class ShopController extends Controller
         $counts = ['products' => $shop->products()->where('status', 'active')->count(), 'pending' => $shop->orders()->where('status', 'pending')->count(), 'requests' => $shop->orders()->count()];
         $metrics = DB::table('daily_metrics')->where('shop_id', $shop->id)->where('day', '>=', now()->subDays(6)->toDateString())->selectRaw('COALESCE(SUM(views),0) as views, COALESCE(SUM(whatsapp_clicks),0) as clicks')->first();
 
-        return view('dashboard', compact('shop', 'recent', 'counts', 'metrics'));
+        $styles = config('cataloguito.styles');
+
+        return view('dashboard', compact('shop', 'recent', 'counts', 'metrics', 'styles'));
     }
 
     public function settings(Request $r)
     {
-        return view('shop.settings', ['shop' => $r->attributes->get('shop')]);
+        return view('shop.settings', ['shop' => $r->attributes->get('shop'), 'styles' => config('cataloguito.styles')]);
     }
 
     public function update(Request $r, ImageService $images)
@@ -80,7 +84,11 @@ class ShopController extends Controller
 
     public function appearance(Request $r)
     {
-        $data = $r->validate(['theme' => 'required|in:minimal,commercial,boutique', 'accent' => 'required|in:#b93828,#4338ca,#0f766e,#9f1239,#1d4ed8,#334155,#a53f35,#154b45,#8c4661,#b34b35,#c74f32,#36684c,#9c493d', 'tagline' => 'nullable|string|max:100']);
+        $data = $r->validate(['style' => 'nullable|in:hilo,volumen,aura,casa,chispa,huellas,dulce', 'theme' => 'nullable|in:minimal,commercial,boutique', 'accent' => 'required|in:#b93828,#4338ca,#0f766e,#9f1239,#1d4ed8,#334155,#a53f35,#154b45,#8c4661,#b34b35,#c74f32,#36684c,#9c493d', 'tagline' => 'nullable|string|max:100']);
+        $style = $data['style'] ?? $r->attributes->get('shop')->currentStyle();
+        $preset = config('cataloguito.styles.'.$style);
+        $data['style'] = $style;
+        $data['theme'] = $preset['family'];
         $shop = $r->attributes->get('shop');
         if ($r->input('action') === 'publish') {
             $shop->update(['appearance' => $data, 'appearance_draft' => $data, 'catalog_version' => $shop->catalog_version + 1]);

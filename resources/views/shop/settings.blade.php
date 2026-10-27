@@ -60,36 +60,27 @@
                 </section>
             </form>
         </div>
-        <aside class="card form-section">
-            <h2>Un estilo bien tuyo</h2>
-            <p>Guardá una vista previa y mirala antes de publicar.</p>
-            <form method="post" action="{{ route('shop.appearance') }}" x-data="{ theme: @js(old('theme', $shop->appearance_draft['theme'])) }">@csrf
-                @method('PUT')<div class="theme-options">
-                    @foreach (['minimal' => 'Minimal', 'boutique' => 'Boutique', 'commercial' => 'Comercial'] as $key => $name)
-                        <label class="theme-option" :class="theme === @js($key) ? 'selected' : ''"><span
-                                class="theme-mini {{ $key }}"><i></i><i></i><i></i><i></i></span><input
-                                type="radio" name="theme" value="{{ $key }}"
-                                x-model="theme">{{ $name }}</label>
+        <aside class="card form-section appearance-studio" id="estilo">
+            <div class="appearance-heading"><div><span class="eyebrow">TU VIDRIERA</span><h2>Elegí una plantilla por rubro</h2><p>Cada estilo cambia la composición, la tipografía y la forma de mostrar tus productos.</p></div><a href="{{ route('templates.index') }}" target="_blank" class="text-link">Ver galería completa <x-icon name="external" :size="14" /></a></div>
+            <form method="post" action="{{ route('shop.appearance') }}" x-data="{ style: @js(old('style', $shop->currentStyle())), accent: @js(old('accent', $shop->appearance_draft['accent'])) }">@csrf
+                @method('PUT')<div class="style-picker-grid">
+                    @foreach ($styles as $key => $template)
+                        <label class="style-picker" :class="style === @js($key) ? 'selected' : ''" style="--picker-accent:{{ $template['accent'] }};--picker-surface:{{ $template['surface'] }}"><input type="radio" name="style" value="{{ $key }}" x-model="style" @change="accent=@js($template['accent'])"><span class="style-picker-art"><i></i><i></i><i></i></span><span><strong>{{ $template['name'] }}</strong><small>{{ $template['sector'] }}</small></span><b aria-hidden="true">✓</b></label>
                     @endforeach
                 </div>
-                <div class="field"><span class="field-label">Color de acento</span>
+                <div class="field appearance-color"><span class="field-label">Ahora elegí el color principal</span><small class="field-help">Las opciones conservan buen contraste en botones y precios.</small>
                     <div class="color-options">
                         @foreach (['#b93828' => 'Coral', '#a53f35' => 'Terracota', '#154b45' => 'Bosque', '#8c4661' => 'Malva', '#b34b35' => 'Arcilla', '#c74f32' => 'Mandarina', '#36684c' => 'Verde hoja', '#9c493d' => 'Cacao rosa', '#4338ca' => 'Índigo', '#0f766e' => 'Petróleo', '#9f1239' => 'Cereza', '#1d4ed8' => 'Azul', '#334155' => 'Grafito'] as $hex => $name)
                             <label class="color-option" title="{{ $name }}"><input type="radio"
                                     name="accent" value="{{ $hex }}" aria-label="{{ $name }}"
-                                    @checked(old('accent', $shop->appearance_draft['accent']) === $hex)><span
+                                    x-model="accent"><span
                                     style="background:{{ $hex }}"></span></label>
                         @endforeach
                     </div>
                 </div>
-                <div class="field"><label for="tagline">Frase de tu catálogo</label><input name="tagline"
+                <div class="field"><label for="tagline">Frase principal del catálogo</label><input name="tagline"
                         id="tagline" maxlength="100"
-                        value="{{ old('tagline', $shop->appearance_draft['tagline'] ?? '') }}"></div><button
-                    name="action" value="draft" class="button secondary full">Guardar vista previa</button><a
-                    class="button secondary full" style="margin-top:9px" href="{{ route('shop.preview') }}"
-                    target="_blank" rel="noopener">Ver diseño <x-icon name="external" :size="16" /></a><button
-                    name="action" value="publish" class="button dark full" style="margin-top:9px">Publicar este
-                    diseño <x-icon name="check" :size="16" /></button>
+                        value="{{ old('tagline', $shop->appearance_draft['tagline'] ?? '') }}" placeholder="Una selección hecha para vos…"></div><div class="appearance-actions"><button name="action" value="draft" class="button secondary">Guardar borrador</button><a class="button secondary" href="{{ route('shop.preview') }}" target="_blank" rel="noopener">Ver mi catálogo <x-icon name="external" :size="16" /></a><button name="action" value="publish" class="button dark">Publicar diseño <x-icon name="check" :size="16" /></button></div>
             </form>
         </aside>
     </div>

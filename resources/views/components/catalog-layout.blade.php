@@ -13,7 +13,7 @@
             @endif @if ($preview)
                 <meta name="robots" content="noindex,nofollow">
             @endif @endpush
-            <div class="catalog-page catalog-{{ $appearance['theme'] }}" style="--accent:{{ $appearance['accent'] }}"
+            <div class="catalog-page catalog-{{ $appearance['theme'] }} style-{{ $appearance['style'] ?? 'casa' }}" style="--accent:{{ $appearance['accent'] }}"
                 x-data="catalogCart('{{ $shop->slug }}', {{ $preview ? 'true' : 'false' }})" @add-product.window="add($event.detail)"
                 @keydown.escape.window="if(opened) close()">
                 <div :inert="opened">

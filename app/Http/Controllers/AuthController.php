@@ -23,6 +23,13 @@ class AuthController extends Controller
         $style = request()->query('style');
         if ($mode === 'register' && array_key_exists((string) $style, config('cataloguito.styles'))) {
             request()->session()->put('selected_style', $style);
+            $color = (string) request()->query('color');
+            $palettes = config('cataloguito.styles.'.$style.'.palettes', []);
+            if (array_key_exists($color, $palettes)) {
+                request()->session()->put('selected_accent', $color);
+            } else {
+                request()->session()->forget('selected_accent');
+            }
         }
 
         return view('auth.form', ['mode' => $mode, 'selectedStyle' => request()->session()->get('selected_style')]);

@@ -74,6 +74,11 @@ test("un comercio publica, actualiza, recibe y gestiona un pedido desde el celul
         page.getByText("Precio guardado", { exact: true }),
     ).toBeVisible();
     await page.goto("/app/catalog");
+    await expect(page.getByRole("radio", { name: /Hilo/ })).toBeVisible();
+    await page.locator('label.style-picker:has-text("Hilo")').click();
+    await page.locator('label.color-option[title="Malva"]').click();
+    await page.getByRole("button", { name: "Publicar diseño" }).click();
+    await expect(page.getByText("Diseño publicado.")).toBeVisible();
     await page
         .getByRole("button", { name: "Publicar catálogo", exact: true })
         .click();
@@ -84,11 +89,17 @@ test("un comercio publica, actualiza, recibe y gestiona un pedido desde el celul
         path: "test-results/mvp-configuracion-movil.png",
         fullPage: true,
     });
+    await page.goto("/app");
+    await page.screenshot({
+        path: "test-results/mvp-dashboard-movil.png",
+        fullPage: true,
+    });
     const buyer = await browser.newContext({
         viewport: { width: 390, height: 844 },
     });
     const shop = await buyer.newPage();
     await shop.goto("/" + slug);
+    await expect(shop.locator(".catalog-page")).toHaveClass(/style-hilo/);
     await expect(shop.getByText("$ 13.900", { exact: true })).toBeVisible();
     await expect(shop.locator("html")).toHaveJSProperty("scrollWidth", 390);
     await shop
@@ -208,4 +219,19 @@ test("la landing y el registro mobile muestran plantillas y errores claros", asy
     await page.getByRole("button", { name: "Crear mi cuenta" }).click();
     await expect(page.locator("#password-error")).toHaveText("Las contraseñas no coinciden.");
     await expect(page.getByLabel("Contraseña", { exact: true })).toHaveAttribute("aria-invalid", "true");
+});
+
+test("cada rubro tiene una demo completa con paletas navegables", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    for (const style of ["hilo", "volumen", "aura", "casa", "chispa", "huellas", "dulce"]) {
+        await page.goto(`/plantillas/${style}`);
+        await expect(page.locator(`.showcase-${style}`)).toBeVisible();
+        await expect(page.locator(".demo-palette a")).toHaveCount(3);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+    await page.goto("/plantillas/chispa?color=%234338ca");
+    await expect(page.locator(".template-showcase")).toHaveAttribute("style", /#4338ca/);
+    await expect(page.getByRole("link", { name: "Usar Chispa" })).toHaveAttribute("href", /color=%234338ca/i);
+    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    expect(results.violations.map((violation) => violation.id)).toEqual([]);
 });

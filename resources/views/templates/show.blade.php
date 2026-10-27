@@ -1,5 +1,5 @@
 <x-base :title="$template['shop'].' · Catálogo de ejemplo'">
     @push('head')<meta name="robots" content="noindex,follow">@endpush
-    <div class="demo-notice"><span>Catálogo de ejemplo · {{ $template['sector'] }}</span><div><a href="{{ route('templates.index') }}">Ver otros estilos</a><a class="button warm" href="{{ route('register', ['style' => $style]) }}">Usar {{ $template['name'] }}</a></div></div>
-    <main id="main" class="template-demo-page"><x-template-preview :template="$template" :style="$style" /></main>
+    <div class="demo-notice"><div class="demo-notice-copy"><a href="{{ route('templates.index') }}"><x-icon name="arrow" :size="14" /> Todas las plantillas</a><span>{{ $template['sector'] }} · Estilo {{ $template['name'] }}</span></div><div class="demo-notice-actions"><span>Probá otro color</span><div class="demo-palette" aria-label="Colores disponibles">@foreach($template['palettes'] as $hex => $name)<a href="{{ route('templates.show', ['style' => $style, 'color' => $hex]) }}" class="{{ $selectedColor === $hex ? 'active' : '' }}" style="--swatch:{{ $hex }}" aria-label="Ver en color {{ $name }}" title="{{ $name }}"></a>@endforeach</div><a class="button warm" href="{{ route('register', ['style' => $style, 'color' => $selectedColor]) }}">Usar {{ $template['name'] }}</a></div></div>
+    <main id="main" class="template-demo-page"><x-template-showcase :template="$template" :style="$style" :color="$selectedColor" /></main>
 </x-base>

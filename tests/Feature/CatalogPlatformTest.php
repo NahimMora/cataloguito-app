@@ -78,12 +78,23 @@ class CatalogPlatformTest extends TestCase
     public function test_selected_template_survives_registration_and_becomes_shop_appearance(): void
     {
         Notification::fake();
-        $this->get('/register?style=hilo')->assertOk();
+        $this->get('/register?style=hilo&color=%23334155')->assertOk();
         $this->post('/register', ['name' => 'Hilda', 'email' => 'hilda@example.test', 'password' => 'Password12345', 'password_confirmation' => 'Password12345', 'terms' => 1])->assertRedirect('/onboarding');
         $this->post('/onboarding', ['name' => 'Ropa de Hilda', 'slug' => 'ropa-hilda', 'whatsapp_country' => '54', 'whatsapp_local' => '11 1234 5678'])->assertRedirect('/app');
         $shop = Shop::where('slug', 'ropa-hilda')->firstOrFail();
+        $this->assertSame('hilo', $shop->appearance['style']);
         $this->assertSame('boutique', $shop->appearance['theme']);
-        $this->assertSame('#a53f35', $shop->appearance['accent']);
+        $this->assertSame('#334155', $shop->appearance['accent']);
+    }
+
+    public function test_merchant_can_publish_a_rubric_style_with_custom_color(): void
+    {
+        $shop = $this->merchant();
+        $this->actingAs($shop->user)->put('/app/appearance', ['style' => 'chispa', 'accent' => '#4338ca', 'tagline' => 'Jugamos en serio', 'action' => 'publish'])->assertSessionHas('success');
+        $appearance = $shop->fresh()->appearance;
+        $this->assertSame('chispa', $appearance['style']);
+        $this->assertSame('minimal', $appearance['theme']);
+        $this->assertSame('#4338ca', $appearance['accent']);
     }
 
     public function test_register_errors_are_linked_to_their_fields(): void
@@ -402,11 +413,12 @@ class CatalogPlatformTest extends TestCase
         }
     }
 
-    public function test_quantity_limits_and_invalid_money_are_rejected(): void
+    public function test_quantity_limits_and_argentine_money_format_are_supported(): void
     {
         $shop = $this->merchant();
         $p = $this->product($shop);
         $this->postJson('/prueba/quote', ['items' => [['id' => $p->public_id, 'quantity' => -1]]])->assertUnprocessable();
-        $this->actingAs($shop->user)->patchJson('/app/products/'.$p->public_id.'/quick', ['price' => '1.000,50', 'version' => 1])->assertUnprocessable();
+        $this->actingAs($shop->user)->patchJson('/app/products/'.$p->public_id.'/quick', ['price' => '$ 1.000,50', 'version' => 1])->assertOk()->assertJsonPath('formatted', '$ 1.000,50');
+        $this->patchJson('/app/products/'.$p->public_id.'/quick', ['price' => '1.00.0', 'version' => 2])->assertUnprocessable();
     }
 }

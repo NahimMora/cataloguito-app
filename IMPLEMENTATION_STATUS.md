@@ -24,9 +24,9 @@ Extras incluidos: exportación CSV segura, archivo reversible, historial de pedi
 
 ## Verificación ejecutada
 
-- `npm run test:backend`: **34 pruebas, 198 aserciones**, incluida concurrencia real, aislamiento entre comercios, teléfonos por país, selección de estilo, errores de alta, robots y sitemap.
-- `npm run test:e2e`: **3 recorridos aprobados**, alta/verificación/foto/precio/publicación/pedido/gestión, accesibilidad/teclado/móvil/escritorio y landing/registro mobile-first.
-- `npm run build`: correcto. CSS 53,44 KB / 12,16 KB gzip; JS 59,11 KB / 21,07 KB gzip; fuente local 24,83 KB.
+- `npm run test:backend`: **35 pruebas, 205 aserciones**, incluida concurrencia real, aislamiento entre comercios, teléfonos por país, estilos por rubro con color, formato monetario argentino, errores de alta, robots y sitemap.
+- `npm run test:e2e`: **4 recorridos aprobados**, alta/verificación/foto/precio/publicación/pedido/gestión, accesibilidad/teclado/móvil/escritorio, landing/registro mobile-first y las siete demos completas con paletas navegables.
+- `npm run build`: correcto. CSS 68,28 KB / 15,04 KB gzip; JS 59,11 KB / 21,07 KB gzip; fuente local 24,83 KB.
 - Laravel Pint aplicado. Backup restaurado en `vitrina_restore_test`, SQL y 24 archivos de imagen verificados con hashes.
 - Lighthouse móvil local de la landing final: rendimiento **97**, accesibilidad **100**, SEO **100**; FCP 1,7 s, LCP 2,4 s, TBT 20 ms y CLS 0. Laboratorio sobre servidor de desarrollo, no Core Web Vitals reales ni garantía de producción. Informe `.tools/lighthouse.json`; repetir con `npm run test:performance`.
 - Axe no encontró infracciones en las reglas WCAG evaluadas; no sustituye una auditoría completa.
@@ -47,4 +47,4 @@ No se alcanzó un límite diario ni se programó una reanudación automática du
 
 ## Estrategia Cataloguito completada
 
-La estrategia de `CATALOGUITO_PLAN.md` quedó implementada y verificada: marca cálida con coral dominante, landing compacta e interactiva, siete muestras por rubro, familia Boutique, alta sin desplazamiento inicial innecesario, errores asociados a campos, teléfonos con país separado y Argentina por defecto, avisos corregidos, fotografías originales y base SEO técnica/editorial.
+La estrategia de `CATALOGUITO_PLAN.md` quedó implementada y verificada: marca cálida con coral dominante e ícono propio, landing compacta e interactiva, siete páginas de muestra completas y diferenciadas por rubro, elección de plantilla y color persistente, familia Boutique, panel superior más denso, precios con formato argentino, alta sin desplazamiento inicial innecesario, errores asociados a campos, teléfonos con país separado y Argentina por defecto, avisos corregidos, fotografías originales y base SEO técnica/editorial.
