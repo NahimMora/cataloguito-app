@@ -29,9 +29,16 @@ class ShopController extends Controller
         if ($r->user()->shop) {
             return redirect()->route('dashboard');
         }
-        $data = $r->validate(['name' => 'required|string|max:100', 'slug' => ['required', 'string', 'min:3', 'max:60', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', 'unique:shops,slug', Rule::notIn(['app', 'admin', 'api', 'login', 'register', 'registro', 'onboarding', 'precios', 'ayuda', 'legal', 'media', 'dev', 'assets', 'storage', 'up', 'build', 'forgot-password', 'reset-password', 'verify-email', 'sitemap', 'robots', 'logout', 'email'])], 'whatsapp' => 'required|string|max:25']);
-        $data['whatsapp'] = Phone::normalize($data['whatsapp']);
-        Shop::create($data + ['user_id' => $r->user()->id, 'appearance' => Shop::defaultAppearance(), 'appearance_draft' => Shop::defaultAppearance()]);
+        $data = $r->validate(['name' => 'required|string|max:100', 'slug' => ['required', 'string', 'min:3', 'max:60', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', 'unique:shops,slug', Rule::notIn(['app', 'admin', 'api', 'login', 'register', 'regisster', 'registro', 'onboarding', 'precios', 'plantillas', 'catalogo-para-whatsapp', 'crear-catalogo-digital-gratis', 'ayuda', 'legal', 'media', 'dev', 'assets', 'storage', 'up', 'build', 'forgot-password', 'reset-password', 'verify-email', 'sitemap', 'robots', 'logout', 'email'])], 'whatsapp_country' => 'required|string|max:4', 'whatsapp_local' => 'required|string|max:25']);
+        $data['whatsapp'] = Phone::normalizeParts($data['whatsapp_country'], $data['whatsapp_local']);
+        unset($data['whatsapp_country'], $data['whatsapp_local']);
+        $style = $r->session()->pull('selected_style');
+        $preset = config('cataloguito.styles.'.$style);
+        $appearance = Shop::defaultAppearance();
+        if ($preset) {
+            $appearance = ['theme' => $preset['family'], 'accent' => $preset['accent'], 'tagline' => ''];
+        }
+        Shop::create($data + ['user_id' => $r->user()->id, 'appearance' => $appearance, 'appearance_draft' => $appearance]);
 
         return redirect()->route('dashboard')->with('success', 'Tu espacio está listo. Agregá tus primeros productos.');
     }
@@ -53,9 +60,9 @@ class ShopController extends Controller
 
     public function update(Request $r, ImageService $images)
     {
-        $data = $r->validate(['name' => 'required|string|max:100', 'description' => 'nullable|string|max:300', 'whatsapp' => 'required|string|max:25', 'instagram' => 'nullable|regex:/^[A-Za-z0-9._]{1,50}$/', 'facebook' => 'nullable|url:https|max:200', 'image' => 'nullable|file|max:4883', 'remove_logo' => 'sometimes|boolean']);
-        $data['whatsapp'] = Phone::normalize($data['whatsapp']);
-        unset($data['image'],$data['remove_logo']);
+        $data = $r->validate(['name' => 'required|string|max:100', 'description' => 'nullable|string|max:300', 'whatsapp_country' => 'required|string|max:4', 'whatsapp_local' => 'required|string|max:25', 'instagram' => 'nullable|regex:/^[A-Za-z0-9._]{1,50}$/', 'facebook' => 'nullable|url:https|max:200', 'image' => 'nullable|file|max:4883', 'remove_logo' => 'sometimes|boolean']);
+        $data['whatsapp'] = Phone::normalizeParts($data['whatsapp_country'], $data['whatsapp_local']);
+        unset($data['image'], $data['remove_logo'], $data['whatsapp_country'], $data['whatsapp_local']);
         DB::transaction(function () use ($r, $data, $images) {
             $shop = Shop::whereKey($r->attributes->get('shop')->id)->lockForUpdate()->firstOrFail();
             $shop->fill($data);
@@ -73,7 +80,7 @@ class ShopController extends Controller
 
     public function appearance(Request $r)
     {
-        $data = $r->validate(['theme' => 'required|in:minimal,commercial', 'accent' => 'required|in:#4338ca,#0f766e,#9f1239,#1d4ed8,#334155', 'tagline' => 'nullable|string|max:100']);
+        $data = $r->validate(['theme' => 'required|in:minimal,commercial,boutique', 'accent' => 'required|in:#b93828,#4338ca,#0f766e,#9f1239,#1d4ed8,#334155,#a53f35,#154b45,#8c4661,#b34b35,#c74f32,#36684c,#9c493d', 'tagline' => 'nullable|string|max:100']);
         $shop = $r->attributes->get('shop');
         if ($r->input('action') === 'publish') {
             $shop->update(['appearance' => $data, 'appearance_draft' => $data, 'catalog_version' => $shop->catalog_version + 1]);

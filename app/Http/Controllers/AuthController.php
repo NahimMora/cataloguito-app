@@ -20,13 +20,21 @@ class AuthController extends Controller
 {
     public function form(string $mode = 'login')
     {
-        return view('auth.form', compact('mode'));
+        $style = request()->query('style');
+        if ($mode === 'register' && array_key_exists((string) $style, config('cataloguito.styles'))) {
+            request()->session()->put('selected_style', $style);
+        }
+
+        return view('auth.form', ['mode' => $mode, 'selectedStyle' => request()->session()->get('selected_style')]);
     }
 
     public function register(Request $r)
     {
         $r->merge(['email' => mb_strtolower(trim((string) $r->email))]);
-        $data = $r->validate(['name' => 'required|string|max:80', 'email' => 'required|email|max:254|unique:users', 'password' => ['required', 'confirmed', PasswordRule::min(10)->letters()->numbers()], 'terms' => 'accepted']);
+        $data = $r->validate(
+            ['name' => 'required|string|max:80', 'email' => 'required|email|max:254|unique:users', 'password' => ['required', 'confirmed', PasswordRule::min(10)->letters()->numbers()], 'terms' => 'accepted'],
+            ['email.unique' => 'Este email ya tiene una cuenta. Podés ingresar o recuperar el acceso.', 'password.confirmed' => 'Las contraseñas no coinciden.', 'terms.accepted' => 'Necesitamos que aceptes los términos y la privacidad para continuar.']
+        );
         $user = User::create(collect($data)->only('name', 'email', 'password')->all());
         Auth::login($user);
         $r->session()->regenerate();

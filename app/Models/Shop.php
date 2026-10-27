@@ -61,7 +61,7 @@ class Shop extends Model
 
     public static function defaultAppearance(): array
     {
-        return ['theme' => 'minimal', 'accent' => '#4338ca', 'tagline' => 'Una selección hecha para vos'];
+        return ['theme' => 'minimal', 'accent' => '#b93828', 'tagline' => 'Una selección hecha para vos'];
     }
 
     public function logoUrl(): ?string

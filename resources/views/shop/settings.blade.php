@@ -47,10 +47,9 @@
                 <section class="form-section">
                     <h2>Dónde encontrarte</h2>
                     <p>La conversación sigue en tus canales habituales.</p>
-                    <div class="field"><label for="whatsapp">WhatsApp internacional</label><input type="tel"
-                            name="whatsapp" id="whatsapp" value="{{ old('whatsapp', $shop->whatsapp) }}" required><a
-                            class="field-help text-link" href="https://wa.me/{{ $shop->whatsapp }}" target="_blank"
-                            rel="noopener noreferrer">Probar mi número ↗</a></div>
+                    <x-phone-input label="WhatsApp del negocio" :value="$shop->whatsapp" />
+                    <a class="field-help text-link" href="https://wa.me/{{ $shop->whatsapp }}" target="_blank"
+                        rel="noopener noreferrer">Probar mi número actual ↗</a>
                     <div class="field"><label for="instagram">Usuario de Instagram</label><input name="instagram"
                             id="instagram" value="{{ old('instagram', $shop->instagram) }}"
                             placeholder="tunegocio, sin @"></div>
@@ -66,7 +65,7 @@
             <p>Guardá una vista previa y mirala antes de publicar.</p>
             <form method="post" action="{{ route('shop.appearance') }}" x-data="{ theme: @js(old('theme', $shop->appearance_draft['theme'])) }">@csrf
                 @method('PUT')<div class="theme-options">
-                    @foreach (['minimal' => 'Minimal', 'commercial' => 'Comercial'] as $key => $name)
+                    @foreach (['minimal' => 'Minimal', 'boutique' => 'Boutique', 'commercial' => 'Comercial'] as $key => $name)
                         <label class="theme-option" :class="theme === @js($key) ? 'selected' : ''"><span
                                 class="theme-mini {{ $key }}"><i></i><i></i><i></i><i></i></span><input
                                 type="radio" name="theme" value="{{ $key }}"
@@ -75,7 +74,7 @@
                 </div>
                 <div class="field"><span class="field-label">Color de acento</span>
                     <div class="color-options">
-                        @foreach (['#4338ca' => 'Índigo', '#0f766e' => 'Petróleo', '#9f1239' => 'Cereza', '#1d4ed8' => 'Azul', '#334155' => 'Grafito'] as $hex => $name)
+                        @foreach (['#b93828' => 'Coral', '#a53f35' => 'Terracota', '#154b45' => 'Bosque', '#8c4661' => 'Malva', '#b34b35' => 'Arcilla', '#c74f32' => 'Mandarina', '#36684c' => 'Verde hoja', '#9c493d' => 'Cacao rosa', '#4338ca' => 'Índigo', '#0f766e' => 'Petróleo', '#9f1239' => 'Cereza', '#1d4ed8' => 'Azul', '#334155' => 'Grafito'] as $hex => $name)
                             <label class="color-option" title="{{ $name }}"><input type="radio"
                                     name="accent" value="{{ $hex }}" aria-label="{{ $name }}"
                                     @checked(old('accent', $shop->appearance_draft['accent']) === $hex)><span

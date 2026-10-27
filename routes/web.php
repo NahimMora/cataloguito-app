@@ -7,10 +7,16 @@ use App\Http\Controllers\LocalMailController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\TemplateController;
 use App\Models\Shop;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing')->name('home');
+Route::get('/plantillas', [TemplateController::class, 'index'])->name('templates.index');
+Route::get('/plantillas/{style}', [TemplateController::class, 'show'])->name('templates.show');
+Route::view('/catalogo-para-whatsapp', 'seo.guide', ['guide' => 'whatsapp'])->name('seo.whatsapp');
+Route::view('/crear-catalogo-digital-gratis', 'seo.guide', ['guide' => 'gratis'])->name('seo.free');
+Route::redirect('/regisster', '/register', 301);
 Route::view('/legal/privacidad', 'legal', ['kind' => 'privacy'])->name('privacy');
 Route::view('/legal/terminos', 'legal', ['kind' => 'terms'])->name('terms');
 Route::get('/dev/mail', [LocalMailController::class, 'index'])->name('local.mail');
@@ -60,12 +66,13 @@ Route::middleware('auth')->group(function () {
     });
 });
 Route::get('/sitemap.xml', function () {
-    return response()->view('sitemap', ['shops' => Shop::where('status', 'published')->get()])->header('Content-Type', 'application/xml');
+    return response()->view('sitemap', ['shops' => Shop::with(['products' => fn ($query) => $query->where('status', 'active')])->where('status', 'published')->get()])->header('Content-Type', 'application/xml');
 });
+Route::get('/robots.txt', fn () => response("User-agent: *\nAllow: /\nDisallow: /app\nDisallow: /dev/\nDisallow: /onboarding\nDisallow: /*/solicitud/\nDisallow: /*?*\nSitemap: ".url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain']));
 Route::get('/{slug}/p/{id}/{title?}', [CatalogController::class, 'product'])->name('catalog.product');
 Route::get('/{slug}/c/{category}/{categorySlug?}', [CatalogController::class, 'index'])->name('catalog.category');
 Route::post('/{slug}/quote', [CatalogController::class, 'quote'])->middleware('throttle:quotes')->name('catalog.quote');
 Route::post('/{slug}/orders', [CatalogController::class, 'order'])->middleware('throttle:orders')->name('catalog.order');
 Route::get('/{slug}/solicitud/{id}', [CatalogController::class, 'receipt'])->name('catalog.receipt');
-Route::get('/{slug}/whatsapp',[CatalogController::class, 'whatsapp'])->middleware('throttle:30,1')->name('catalog.whatsapp');
-Route::get('/{slug}',[CatalogController::class, 'index'])->name('catalog');
+Route::get('/{slug}/whatsapp', [CatalogController::class, 'whatsapp'])->middleware('throttle:30,1')->name('catalog.whatsapp');
+Route::get('/{slug}', [CatalogController::class, 'index'])->name('catalog');

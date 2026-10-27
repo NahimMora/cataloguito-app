@@ -33,7 +33,7 @@ class BackupCatalog extends Command
         if (! is_dir($folder)) {
             mkdir($folder, 0700, true);
         }
-        $output = $this->option('output') ?: $folder.'/vitrina-'.now()->format('Ymd-His').'.zip';
+        $output = $this->option('output') ?: $folder.'/cataloguito-'.now()->format('Ymd-His').'.zip';
         $parent = realpath(dirname($output));
         if ($parent === false) {
             $this->error('La carpeta de destino no existe.');

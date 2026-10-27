@@ -1,4 +1,4 @@
-<x-base title="Creá tu negocio · Vitrina">
+<x-base title="Creá tu negocio · Cataloguito">
     <main id="main" class="narrow-page" style="max-width:600px">
         <div class="row between"><x-brand />
             <form method="post" action="{{ route('logout') }}">@csrf<button class="button ghost small">Salir</button>
@@ -18,10 +18,11 @@
                         minlength="3" maxlength="60" autocomplete="off"><small
                         class="field-help">{{ url('/') }}/<span x-text="slug || 'tu-negocio'"></span> · Elegila con
                         cuidado: será tu enlace para compartir.</small></div>
-                <div class="field"><label for="whatsapp">WhatsApp del negocio</label><input id="whatsapp"
-                        name="whatsapp" value="{{ old('whatsapp') }}" type="tel" required
-                        placeholder="5491112345678" autocomplete="tel"><small class="field-help">Código de país + área +
-                        número. Para un celular argentino: 549…, sin 0 ni 15.</small></div><button
+                <x-phone-input label="WhatsApp del negocio" />
+                @if (session('selected_style'))
+                    <input type="hidden" name="style" value="{{ session('selected_style') }}">
+                @endif
+                <button
                     class="button dark full">Crear mi espacio <x-icon name="arrow" :size="17" /></button>
             </form>
         </div>

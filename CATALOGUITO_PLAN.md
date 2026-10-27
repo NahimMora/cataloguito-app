@@ -1,6 +1,8 @@
 # Cataloguito: rediseño de marca, landing y experiencia móvil
 
-Fecha: 27/10/2026. Estado: **plan listo para ejecutar; aplicación todavía sin modificar**. Solicitud: marca cercana, color dominante fuerte, landing compacta e interactiva, siete plantillas visibles, mejores formularios, teléfonos y avisos. No incluye pagos ni publicación en producción.
+Fecha: 27/10/2026. Estado: **estrategia implementada localmente; producción no desplegada**. Incluye marca cercana, color dominante fuerte, landing compacta e interactiva, siete plantillas visibles, mejores formularios, teléfonos, avisos y base SEO. No incluye pagos ni publicación en producción.
+
+La sección de diagnóstico conserva la línea de base anterior al cambio. Los resultados finales están en `IMPLEMENTATION_STATUS.md`.
 
 ## 1. Diagnóstico comprobado
 
@@ -71,7 +73,7 @@ No usar testimonios, cifras de comercios, ventas o notificaciones ficticias como
 | Petshop | Huellas | Comercial | Categorías por tipo de producto y recompra visualmente sencilla |
 | Pastelería | Dulce | Boutique | Fotos grandes y mensaje visible de disponibilidad a confirmar |
 
-Los nombres de estilos son propuestas internas, no marcas verificadas. Minimal y Comercial ya existen; Boutique requiere implementación. Las diferencias deben incluir jerarquía/distribución, no solamente cambiar el color de la misma tarjeta.
+Los nombres de estilos son propuestas internas, no marcas verificadas. Minimal, Comercial y Boutique están implementadas. Las diferencias incluyen jerarquía/distribución, no solamente el color de la misma tarjeta.
 
 Usar un registro permitido de presets con familia, tokens, tipografía, densidad, relación de fotos y datos ficticios. Componentes compartidos para precio, búsqueda, producto y carrito. Los presets no agregan código arbitrario ni duplican siete catálogos.
 

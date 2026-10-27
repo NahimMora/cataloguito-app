@@ -18,16 +18,23 @@ class DemoSeeder extends Seeder
         if (! app()->environment(['local', 'testing', 'e2e'])) {
             throw new \RuntimeException('La demo solo puede crearse en local/testing/e2e.');
         }
-        if (User::where('email', 'demo@vitrina.test')->exists()) {
+        if ($legacy = User::where('email', 'demo@vitrina.test')->first()) {
+            $legacy->update(['email' => 'demo@cataloguito.test', 'password' => 'CataloguitoDemo2026']);
+            DB::table('local_messages')->where('recipient', 'demo@vitrina.test')->update(['recipient' => 'demo@cataloguito.test']);
+            $this->command?->info('La demo existente fue actualizada a Cataloguito.');
+
+            return;
+        }
+        if (User::where('email', 'demo@cataloguito.test')->exists()) {
             $this->command?->info('La demo ya existe. No se modificaron sus datos.');
 
             return;
         }
         DB::transaction(function () {
-            $user = User::create(['name' => 'Lucía', 'email' => 'demo@vitrina.test', 'password' => 'VitrinaDemo2026']);
+            $user = User::create(['name' => 'Lucía', 'email' => 'demo@cataloguito.test', 'password' => 'CataloguitoDemo2026']);
             $user->markEmailAsVerified();
             // Intentionally invalid destination: demo never contacts a real merchant.
-            $shop = Shop::create(['user_id' => $user->id, 'slug' => 'casa-luma', 'name' => 'Casa Luma', 'description' => 'Objetos que acompañan tus días. Una selección de diseño, texturas y pequeños detalles para disfrutar lo cotidiano.', 'whatsapp' => '5491100000000', 'status' => 'published', 'appearance' => ['theme' => 'minimal', 'accent' => '#4338ca', 'tagline' => 'Objetos para los pequeños rituales.'], 'appearance_draft' => ['theme' => 'minimal', 'accent' => '#4338ca', 'tagline' => 'Objetos para los pequeños rituales.']]);
+            $shop = Shop::create(['user_id' => $user->id, 'slug' => 'casa-luma', 'name' => 'Casa Luma', 'description' => 'Objetos que acompañan tus días. Una selección de diseño, texturas y pequeños detalles para disfrutar lo cotidiano.', 'whatsapp' => '5491100000000', 'status' => 'published', 'appearance' => ['theme' => 'minimal', 'accent' => '#b93828', 'tagline' => 'Objetos para los pequeños rituales.'], 'appearance_draft' => ['theme' => 'minimal', 'accent' => '#b93828', 'tagline' => 'Objetos para los pequeños rituales.']]);
             $cats = [];
             foreach (['Todo para casa', 'Para llevar', 'Accesorios'] as $i => $name) {
                 $cats[] = $shop->categories()->create(['name' => $name, 'slug' => Str::slug($name), 'sort_order' => $i]);
@@ -49,6 +56,6 @@ class DemoSeeder extends Seeder
             }
             $shop->update(['order_sequence' => 3]);
         });
-        $this->command?->info('Demo creada: demo@vitrina.test / VitrinaDemo2026 · catálogo /casa-luma. Datos y teléfono ficticios.');
+        $this->command?->info('Demo creada: demo@cataloguito.test / CataloguitoDemo2026 · catálogo /casa-luma. Datos y teléfono ficticios.');
     }
 }

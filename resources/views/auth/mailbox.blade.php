@@ -1,4 +1,4 @@
-<x-base title="Correo local · Vitrina">
+<x-base title="Correo local · Cataloguito">
     <main id="main" class="narrow-page"><x-brand />
         <div class="page-heading" style="margin-top:35px">
             <div>

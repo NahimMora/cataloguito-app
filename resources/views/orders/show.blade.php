@@ -70,6 +70,20 @@
                             class="badge {{ $order->status }}">{{ \App\Models\Order::LABELS[$order->status] }}</span>
                     @endif
             </section>
+            <section class="card card-padding notification-status">
+                <h2>Aviso por email</h2>
+                @if (!$currentShop->email_orders)
+                    <p><span class="badge neutral">Desactivado</span> Podés activarlo desde Cuenta.</p>
+                @elseif (!$notification)
+                    <p><span class="badge neutral">Sin aviso</span> El pedido se guardó correctamente.</p>
+                @elseif ($notification->status === 'sent')
+                    <p><span class="badge green">Entregado al transporte</span> El servidor de correo aceptó el aviso. Esto no confirma su lectura.</p>
+                @elseif ($notification->status === 'failed')
+                    <p><span class="badge cancelled">Falló</span> El pedido sigue guardado. Revisá la configuración de correo.</p>
+                @else
+                    <p><span class="badge neutral">Pendiente</span> Cataloguito volverá a intentar el envío.</p>
+                @endif
+            </section>
         </aside>
     </div>
 </x-app-layout>

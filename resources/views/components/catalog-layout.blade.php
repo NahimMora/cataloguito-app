@@ -59,7 +59,7 @@
                                 <a href="{{ route('privacy') }}">
                                     Privacidad</a>
                                 @if ($shop->plan !== 'pro')
-                                    <a href="{{ route('home') }}">Creado con vitrina.</a>
+                                    <a href="{{ route('home') }}">Creado con Cataloguito.</a>
                                 @endif
                         </div>
                     </footer>
@@ -120,10 +120,14 @@
                             <div class="field"><label for="buyer-name">Tu nombre</label><input id="buyer-name"
                                     name="name" x-model="name" x-ref="buyerName" autocomplete="name" maxlength="100"
                                     required></div>
-                            <div class="field"><label for="buyer-phone">Tu WhatsApp</label><input id="buyer-phone"
-                                    name="phone" type="tel" x-model="phone" autocomplete="tel" maxlength="25"
-                                    placeholder="5491112345678" required><small class="field-help">Número internacional
-                                    con código de país.</small></div>
+                            <div class="field phone-field"><label for="buyer-phone">Tu WhatsApp</label><div class="phone-control">
+                                <select x-model="phoneCountry" aria-label="País de tu WhatsApp">
+                                    @foreach (\App\Support\Phone::COUNTRIES as $code => $countryLabel)
+                                        <option value="{{ $code }}">{{ $countryLabel }} +{{ $code }}</option>
+                                    @endforeach
+                                </select><input id="buyer-phone" name="phone_local" type="tel" x-model="phone"
+                                    autocomplete="tel-national" inputmode="tel" maxlength="25" placeholder="11 2345 6789" required>
+                            </div><small class="field-help">Argentina: código de área y número, sin 0 ni 15.</small></div>
                             <div class="field"><label for="buyer-note">Algo que quieras aclarar
                                     <small>opcional</small></label>
                                 <textarea id="buyer-note" name="note" x-model="note" maxlength="500" rows="3"></textarea>

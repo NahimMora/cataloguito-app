@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
 use App\Services\OutboxProcessor;
+use App\Support\Phone;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Database\QueryException;
@@ -54,14 +55,50 @@ class CatalogPlatformTest extends TestCase
         $quote = $this->postJson('/'.$shop->slug.'/quote', ['items' => $items])->assertOk()->json('token');
         $this->withCookie(config('session.cookie'), $this->app['session']->getId());
 
-        return ['items' => $items, 'quote' => $quote, 'key' => (string) Str::uuid(), 'name' => 'Comprador prueba', 'phone' => '5491100000000', 'note' => 'Retiro a coordinar', 'website' => ''];
+        return ['items' => $items, 'quote' => $quote, 'key' => (string) Str::uuid(), 'name' => 'Comprador prueba', 'phone_country' => '54', 'phone_local' => '11 0000 0000', 'note' => 'Retiro a coordinar', 'website' => ''];
     }
 
     public function test_landing_and_guest_routes_are_available(): void
     {
-        $this->get('/')->assertOk()->assertSee('Siempre al día.');
+        $this->get('/')->assertOk()->assertSee('Tu catálogo online, listo para compartir por WhatsApp.')->assertSee('"@context":"https://schema.org"', false);
         $this->get('/app')->assertRedirect('/login');
         $this->get('/register')->assertOk();
+        $this->get('/plantillas')->assertOk()->assertSee('Tienda de ropa')->assertSee('Mayoristas y distribuidores');
+        $this->get('/plantillas/hilo')->assertOk()->assertHeader('X-Robots-Tag', 'noindex, follow');
+        $this->get('/regisster')->assertRedirect('/register');
+    }
+
+    public function test_argentine_phone_parts_are_normalized_without_duplicating_country(): void
+    {
+        $this->assertSame('5491112345678', Phone::normalizeParts('54', '011 15 1234-5678'));
+        $this->assertSame('5491112345678', Phone::normalizeParts('54', '+54 9 11 1234-5678'));
+        $this->assertSame(['country' => '54', 'local' => '1112345678'], Phone::split('5491112345678'));
+    }
+
+    public function test_selected_template_survives_registration_and_becomes_shop_appearance(): void
+    {
+        Notification::fake();
+        $this->get('/register?style=hilo')->assertOk();
+        $this->post('/register', ['name' => 'Hilda', 'email' => 'hilda@example.test', 'password' => 'Password12345', 'password_confirmation' => 'Password12345', 'terms' => 1])->assertRedirect('/onboarding');
+        $this->post('/onboarding', ['name' => 'Ropa de Hilda', 'slug' => 'ropa-hilda', 'whatsapp_country' => '54', 'whatsapp_local' => '11 1234 5678'])->assertRedirect('/app');
+        $shop = Shop::where('slug', 'ropa-hilda')->firstOrFail();
+        $this->assertSame('boutique', $shop->appearance['theme']);
+        $this->assertSame('#a53f35', $shop->appearance['accent']);
+    }
+
+    public function test_register_errors_are_linked_to_their_fields(): void
+    {
+        User::factory()->create(['email' => 'usado@example.test']);
+        $this->followingRedirects()->from('/register')->post('/register', ['name' => '', 'email' => 'usado@example.test', 'password' => 'abc', 'password_confirmation' => 'xyz'])->assertOk()->assertSee('aria-invalid="true"', false)->assertSee('Este email ya tiene una cuenta. Podés ingresar o recuperar el acceso.');
+    }
+
+    public function test_robots_and_sitemap_expose_only_public_discovery_routes(): void
+    {
+        $shop = $this->merchant();
+        $product = $this->product($shop);
+        $this->get('/robots.txt')->assertOk()->assertSee(url('/sitemap.xml'))->assertDontSee('Disallow: /register');
+        $this->get('/sitemap.xml')->assertOk()->assertSee(route('templates.index'))->assertSee(route('seo.whatsapp'))->assertSee(route('seo.free'))->assertSee($product->publicUrl($shop));
+        $this->get('/prueba?q=taza')->assertHeader('X-Robots-Tag', 'noindex, follow');
     }
 
     public function test_registration_sends_verification_and_creates_shop(): void
@@ -70,14 +107,14 @@ class CatalogPlatformTest extends TestCase
         $this->post('/register', ['name' => 'Ana', 'email' => 'ANA@example.test', 'password' => 'Password12345', 'password_confirmation' => 'Password12345', 'terms' => 1])->assertRedirect('/onboarding');
         $user = User::where('email', 'ana@example.test')->firstOrFail();
         Notification::assertSentTo($user, VerifyEmail::class);
-        $this->post('/onboarding', ['name' => 'Ana Shop', 'slug' => 'ana-shop', 'whatsapp' => '+54 9 11 1234-5678'])->assertRedirect('/app');
+        $this->post('/onboarding', ['name' => 'Ana Shop', 'slug' => 'ana-shop', 'whatsapp_country' => '54', 'whatsapp_local' => '011 15 1234-5678'])->assertRedirect('/app');
         $this->assertDatabaseHas('shops', ['user_id' => $user->id, 'whatsapp' => '5491112345678']);
     }
 
     public function test_reserved_slug_and_cross_tenant_category_are_rejected(): void
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->post('/onboarding', ['name' => 'Foo', 'slug' => 'app', 'whatsapp' => '5491100000000'])->assertSessionHasErrors('slug');
+        $this->actingAs($user)->post('/onboarding', ['name' => 'Foo', 'slug' => 'app', 'whatsapp_country' => '54', 'whatsapp_local' => '11 0000 0000'])->assertSessionHasErrors('slug');
         $a = $this->merchant('ana');
         $b = $this->merchant('beto');
         $cat = $b->categories()->create(['name' => 'Privada', 'slug' => 'privada']);

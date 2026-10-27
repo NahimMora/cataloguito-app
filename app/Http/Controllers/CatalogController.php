@@ -54,9 +54,11 @@ class CatalogController extends Controller
         $response->headers->set('Cache-Control', 'private, no-cache');
         if ($preview) {
             $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+        } elseif ($r->hasAny(['q', 'sort', 'page'])) {
+            $response->headers->set('X-Robots-Tag', 'noindex, follow');
         }
 
-return $response;
+        return $response;
     }
 
     public function product(Request $r, string $slug, string $id, ?string $title = null)
@@ -84,7 +86,7 @@ return $response;
 
     public function order(Request $r, string $slug, OrderService $service)
     {
-        $data = $this->items($r) + $r->validate(['name' => 'required|string|max:100', 'phone' => 'required|string|max:25', 'note' => 'nullable|string|max:500', 'key' => 'required|uuid', 'quote' => 'required|string|max:60000', 'website' => 'nullable|prohibited']);
+        $data = $this->items($r) + $r->validate(['name' => 'required|string|max:100', 'phone_country' => 'required|string|max:4', 'phone_local' => 'required|string|max:25', 'note' => 'nullable|string|max:500', 'key' => 'required|uuid', 'quote' => 'required|string|max:60000', 'website' => 'nullable|prohibited']);
         $shop = $this->shop($slug);
         $order = $service->create($shop, $data, hash('sha256', $r->session()->getId()));
 
@@ -123,8 +125,8 @@ return $response;
         abort_unless($owner || $public, 404);
         abort_unless(in_array($size, [320, 640, 1200], true), 404);
         $path = $media->variants[$size] ?? null;
-        abort_unless($path && Storage::disk('local')->exists($path),404);
+        abort_unless($path && Storage::disk('local')->exists($path), 404);
 
-        return response()->file(Storage::disk('local')->path($path),['Content-Type' => 'image/webp', 'Cache-Control' => $public ? 'public, max-age=604800' : 'private, no-store']);
+        return response()->file(Storage::disk('local')->path($path), ['Content-Type' => 'image/webp', 'Cache-Control' => $public ? 'public, max-age=604800' : 'private, no-store']);
     }
 }

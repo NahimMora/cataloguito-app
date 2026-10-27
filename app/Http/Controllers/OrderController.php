@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -17,7 +18,10 @@ class OrderController extends Controller
 
     public function show(Request $r, string $id)
     {
-        return view('orders.show', ['order' => $r->attributes->get('shop')->orders()->with(['items', 'events'])->where('public_id', $id)->firstOrFail()]);
+        $order = $r->attributes->get('shop')->orders()->with(['items', 'events'])->where('public_id', $id)->firstOrFail();
+        $notification = DB::table('outbox')->where('shop_id', $order->shop_id)->where('order_id', $order->id)->first();
+
+        return view('orders.show', compact('order', 'notification'));
     }
 
     public function status(Request $r, string $id, OrderService $service)
@@ -25,6 +29,6 @@ class OrderController extends Controller
         $r->validate(['status' => 'required|in:confirmed,completed,cancelled']);
         $service->transition($r->attributes->get('shop'), $id, $r->status, $r->user()->id);
 
-        return back()->with('success','Estado del pedido actualizado.');
+        return back()->with('success', 'Estado del pedido actualizado.');
     }
 }

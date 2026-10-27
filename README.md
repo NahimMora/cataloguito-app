@@ -1,10 +1,10 @@
-# Vitrina — MVP de catálogos vivos
+# Cataloguito — MVP de catálogos vivos
 
-Estado: **MVP implementado para uso y verificación local**, autorizado por el fundador después de la investigación. Laravel 13, PHP 8.4 portátil, MariaDB 11.8 aislada y assets compilados. Producción no desplegada. Nombre Vitrina provisional; no se afirma disponibilidad marcaria. La investigación original se conserva como antecedente.
+Estado: **MVP implementado para uso y verificación local**, con rediseño Cataloguito mobile-first. Laravel 13, PHP 8.4 portátil, MariaDB 11.8 aislada y assets compilados. Producción no desplegada. No se afirma disponibilidad marcaria o de dominio. La investigación original se conserva como antecedente.
 
 ## Abrir en esta computadora
 
-Doble clic en **ABRIR_VITRINA.bat**, o ejecutar:
+Doble clic en **ABRIR_CATALOGUITO.bat**, o ejecutar:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
@@ -12,13 +12,13 @@ powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
 
 Aplicación: http://127.0.0.1:8000 · Catálogo de muestra: http://127.0.0.1:8000/casa-luma . El acceso es local; este enlace no funciona desde otros celulares/computadoras sin desplegar o configurar una red autorizada.
 
-Cuenta ficticia de demostración: **demo@vitrina.test** / **VitrinaDemo2026**. También podés registrarte y crear tu propio comercio. La demo usa teléfono ficticio: no se debe interpretar su enlace WhatsApp como destino real.
+Cuenta ficticia de demostración: **demo@cataloguito.test** / **CataloguitoDemo2026**. También podés registrarte y crear tu propio comercio. La demo usa teléfono ficticio: no se debe interpretar su enlace WhatsApp como destino real.
 
 El script inicia la base exclusiva del proyecto si hace falta, el servidor y un procesador local de avisos cada 15 segundos, sin ventanas auxiliares. XAMPP no fue modificado. Para detener servidor/avisos: `powershell -ExecutionPolicy Bypass -File .\scripts\stop.ps1`. La base queda disponible para evitar interrumpir pruebas/respaldos.
 
 ## Qué podés usar
 
-Registro, login, recuperación y verificación; comercio y WhatsApp; categorías; productos con foto optimizada, precio anterior, SKU opcional, disponibilidad y archivo reversible; edición de precio en lista con conflictos detectados; exportación CSV; publicación/pausa; temas Minimal/Comercial con borrador y vista previa; catálogo responsive, búsqueda, orden y enlaces individuales; carrito por tienda; cotización revalidada; solicitud única; recibo privado; mensaje wa.me revisable; bandeja de pedidos/estados/historial; cuenta, cuotas y baja.
+Registro, login, recuperación y verificación; comercio y WhatsApp con país separado; categorías; productos con foto optimizada, precio anterior, SKU opcional, disponibilidad y archivo reversible; edición de precio en lista con conflictos detectados; exportación CSV; familias Minimal/Comercial/Boutique con borrador y vista previa; siete estilos demostrables por rubro; catálogo responsive, búsqueda, orden y enlaces individuales; carrito por tienda; cotización revalidada; solicitud única; recibo privado; mensaje wa.me revisable; bandeja de pedidos/estados/historial; cuenta, cuotas y baja.
 
 Los emails se capturan en **Correo de desarrollo** (`/dev/mail`) para poder verificar/resetear cuentas sin proveedor externo. Solo muestra correos del usuario/sesión y solo está habilitado en local/e2e desde loopback. Para correo real configurar SMTP; la integración de pedidos no depende de que el correo funcione. Las páginas de cuenta/verificación enlazan al visor local.
 
@@ -57,6 +57,8 @@ La suite backend usa exclusivamente `vitrina_test`, configurada en phpunit.xml. 
 
 Comprobaciones: aislamiento A/B y FKs, imágenes/archivos hostiles, cuotas, edición concurrente, precios alterados/obsoletos, idempotencia, recibo por sesión, estados y fallo/reintento de email. E2E recorre alta→verificación→foto→publicación→precio→pedido→gestión. Incluye análisis automatizado de accesibilidad del catálogo, teclado y capturas móvil/escritorio; no equivale a auditoría WCAG completa ni Core Web Vitals de campo.
 
+Última validación local: **34 pruebas backend (198 aserciones)** y **3 recorridos de navegador** aprobados. Lighthouse móvil de la landing: rendimiento 97, accesibilidad 100, SEO 100 y CLS 0. Son resultados de laboratorio local, no métricas de usuarios reales.
+
 `php artisan catalog:backup` crea ZIP privado con SQL, imágenes y hashes; la restauración local se verifica con `scripts/verify-backup.ps1` sobre `vitrina_restore_test`. Transferencia externa cifrada, cron real, SMTP y retención deben configurarse al desplegar. `php artisan catalog:plan tienda pro` habilita un piloto después de conciliación manual; no registra ni verifica un cobro.
 
 La configuración de CI está en `.github/workflows/checks.yml`; queda pendiente su ejecución en un repositorio remoto. No se creó ni publicó un repositorio externo.
@@ -84,7 +86,8 @@ Propuesta comercial: piloto limitado, luego Gratis y Pro. Pro a ARS 7.900/mes co
 | [ROADMAP.md](ROADMAP.md) | Cinco fases, estimaciones, responsables, criterios y riesgos |
 | [AGENTS.md](AGENTS.md) | Reglas compartidas para trabajo posterior autorizado |
 | [CLAUDE.md](CLAUDE.md) | Importación de las reglas compartidas y orientación de frontend |
-| [CATALOGUITO_PLAN.md](CATALOGUITO_PLAN.md) | Plan solicitado de nueva marca, landing móvil, siete estilos, formularios, avisos y SEO; todavía sin ejecutar |
+| [CATALOGUITO_PLAN.md](CATALOGUITO_PLAN.md) | Estrategia ejecutada de nueva marca, landing móvil, siete estilos, formularios, avisos y SEO |
+| [ASSETS.md](ASSETS.md) | Procedencia, rutas y prompts de los recursos visuales originales de Cataloguito |
 
 ## Qué se verificó
 

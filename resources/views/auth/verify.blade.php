@@ -1,4 +1,4 @@
-<x-base title="Verificá tu email · Vitrina">
+<x-base title="Verificá tu email · Cataloguito">
     <main id="main" class="narrow-page"><x-brand />
         <div class="card card-padding" style="margin-top:40px">
             <div class="empty-icon"><x-icon name="mail" :size="28" /></div>

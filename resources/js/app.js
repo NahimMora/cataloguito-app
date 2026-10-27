@@ -106,6 +106,7 @@ Alpine.data("catalogCart", (slug, preview = false) => ({
     error: "",
     quote: null,
     name: "",
+    phoneCountry: "54",
     phone: "",
     note: "",
     website: "",
@@ -114,7 +115,9 @@ Alpine.data("catalogCart", (slug, preview = false) => ({
     init() {
         this.key = crypto.randomUUID();
         try {
-            const s = JSON.parse(localStorage.getItem("vitrina-cart-" + slug));
+            const currentKey = "cataloguito-cart-" + slug;
+            const previousKey = "vitrina-cart-" + slug;
+            const s = JSON.parse(localStorage.getItem(currentKey) || localStorage.getItem(previousKey));
             if (s && s.expires > Date.now() && Array.isArray(s.items))
                 this.items = s.items
                     .filter(
@@ -131,7 +134,7 @@ Alpine.data("catalogCart", (slug, preview = false) => ({
         this.$watch("items", () => {
             try {
                 localStorage.setItem(
-                    "vitrina-cart-" + slug,
+                    "cataloguito-cart-" + slug,
                     JSON.stringify({
                         items: this.items,
                         expires: Date.now() + 7 * 86400000,
@@ -248,13 +251,15 @@ Alpine.data("catalogCart", (slug, preview = false) => ({
                 })),
                 quote: this.quote.token,
                 name: this.name,
-                phone: this.phone,
+                phone_country: this.phoneCountry,
+                phone_local: this.phone,
                 note: this.note,
                 website: this.website,
                 key: this.key,
             });
             this.items = [];
             try {
+                localStorage.removeItem("cataloguito-cart-" + this.slug);
                 localStorage.removeItem("vitrina-cart-" + this.slug);
             } catch {}
             window.location.assign(r.url);

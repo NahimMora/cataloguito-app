@@ -1,6 +1,6 @@
 # Especificación de fase 1 autorizada
 
-Nombre de trabajo: **Vitrina** (provisional, no afirmación de disponibilidad marcaria). Laravel 13/PHP 8.4+, Blade/Alpine/Tailwind/Vite, MySQL/MariaDB. Una tienda por usuario; ARS y unidades enteras. Minimal y Comercial sobre una vista compartida. Gratis: 50 productos y 50 MB; piloto Pro manual: 500 y 1 GB. Sin pagos online.
+Nombre de producto: **Cataloguito** (sujeto a verificación marcaria y de dominio). Laravel 13/PHP 8.4+, Blade/Alpine/Tailwind/Vite, MySQL/MariaDB. Una tienda por usuario; ARS y unidades enteras. Minimal, Comercial y Boutique sobre una vista compartida. Gratis: 50 productos y 50 MB; piloto Pro manual: 500 y 1 GB. Sin pagos online.
 
 El usuario verifica email antes de publicar, cargar borradores está permitido. En desarrollo, emails en visor local privado para verificar/resetear sin SMTP; en producción, SMTP obligatorio. La demo solo se crea mediante comando explícito en entorno local/testing y usa datos ficticios.
 

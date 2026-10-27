@@ -18,7 +18,7 @@ class SecurityHeaders
         if ($request->isSecure()) {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000');
         }
-        if ($request->is('app*', 'login', 'register', 'onboarding', 'verify-email', 'dev/*', '*/solicitud/*', 'forgot-password', 'reset-password*')) {
+        if ($request->is('app*', 'login', 'register', 'regisster', 'onboarding', 'verify-email', 'dev/*', '*/solicitud/*', 'forgot-password', 'reset-password*')) {
             $response->headers->set('Cache-Control', 'private, no-store');
             $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
         }

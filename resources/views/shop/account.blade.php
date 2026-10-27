@@ -68,7 +68,7 @@
             <div class="progress-bar"><span
                     style="width:{{ min(100, ($shop->storage_bytes / $shop->byteLimit()) * 100) }}%"></span></div>
             <p class="field-help" style="margin-top:25px">
-                {{ $shop->plan === 'pro' ? 'Tu plan piloto se administra con el equipo de Vitrina. No hay cobros automáticos activos.' : '¿Necesitás más productos? El plan Pro está en piloto. Consultá con el equipo antes de cambiar de plan.' }}
+                {{ $shop->plan === 'pro' ? 'Tu plan piloto se administra con el equipo de Cataloguito. No hay cobros automáticos activos.' : '¿Necesitás más productos? El plan Pro está en piloto. Consultá con el equipo antes de cambiar de plan.' }}
             </p><a href="mailto:{{ config('vitrina.support_email') }}" class="button secondary full"
                 style="margin-top:18px">Contactar al equipo <x-icon name="mail" :size="16" /></a>
             <form method="post" action="{{ route('logout') }}" style="margin-top:18px">@csrf<button

@@ -1,4 +1,4 @@
-<x-base :title="($kind === 'privacy' ? 'Privacidad' : 'Términos de uso') . ' · Vitrina'">
+<x-base :title="($kind === 'privacy' ? 'Privacidad' : 'Términos de uso') . ' · Cataloguito'">
     <main id="main" class="narrow-page"><x-brand />
         <article class="card card-padding legal-content" style="margin-top:35px">
             <h1>{{ $kind === 'privacy' ? 'Tus datos y tu privacidad' : 'Términos de uso' }}</h1>
@@ -25,7 +25,7 @@
                 <p>Usamos cookies de sesión para mantener acceso, proteger formularios y recuperar solicitudes. El
                     carrito se conserva en este navegador hasta siete días. WhatsApp se abre únicamente al seguir un
                     enlace y aplica sus propias condiciones. El correo transaccional y el alojamiento dependen de los
-                proveedores configurados por el operador.</p>@else<h2>Qué ofrece Vitrina</h2>
+                proveedores configurados por el operador.</p>@else<h2>Qué ofrece Cataloguito</h2>
                 <p>Una plataforma de catálogos y solicitudes de pedido. El comercio es responsable por sus productos,
                     precios, fotografías, condiciones de venta, atención y cumplimiento de las obligaciones que le
                     correspondan.</p>

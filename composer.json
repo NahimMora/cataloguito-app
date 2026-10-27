@@ -1,6 +1,6 @@
 {
     "$schema":  "https://getcomposer.org/schema.json",
-    "name":  "vitrina/catalogo",
+    "name":  "cataloguito/catalogo",
     "type":  "project",
     "description":  "CatÃ¡logos vivos para pequeÃ±os comercios",
     "keywords":  [

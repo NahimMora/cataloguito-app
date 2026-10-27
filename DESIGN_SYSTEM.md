@@ -1,12 +1,12 @@
 # Dirección visual y sistema de diseño
 
-Borrador conceptual original. No se construyeron pantallas ni se copiaron assets de competidores.
+Sistema implementado. Se revisaron patrones públicos de competidores, sin copiar código, marca ni assets.
 
 ## Identidad
 
-Dirección: **claridad editorial cotidiana**. Catálogo protagonizado por producto/foto/precio y panel por acciones. Marca todavía sin nombre definitivo: comprobar disponibilidad de dominio y antecedentes marcarios antes de decidir, sin presentar una denominación como libre.
+Dirección: **cercanía comercial cotidiana**. Cataloguito usa producto/foto/precio como protagonistas y un panel orientado a acciones. El nombre sigue sujeto a comprobar disponibilidad de dominio y antecedentes marcarios.
 
-Paleta propuesta del dashboard: fondo cálido `#F7F6F2`, superficie `#FFFFFF`, texto `#20242C`, acento índigo `#4338CA`, borde `#D8DCE3`, éxito `#166534`, error `#B91C1C`. Son tokens de diseño, no certificación de contraste. El verde se utiliza para estados/WhatsApp cuando corresponda, sin adoptar el verde-crema-mostaza ni la metáfora del toldo de Sucuchito.
+Paleta de marca: coral profundo `#B93828`, crema `#FFF7EC`, cacao `#321C18` y manteca `#FFD76A`. El dashboard conserva superficies claras para tareas largas. Éxito `#166534` y error `#B91C1C`. Las combinaciones principales se comprobaron con axe/Lighthouse; esto no certifica toda la aplicación. No se adoptaron el verde-crema-mostaza ni la metáfora del toldo de Sucuchito.
 
 Cuerpo: Manrope como candidato; títulos y números de precio de la misma familia para el MVP. Boutique puede sumar Fraunces en fase 2. Evaluar licencia del archivo/fuente concreta antes de distribuir y conservar avisos. WOFF2 local, subconjunto latino con español, pesos necesarios, `font-display: swap` y fallback de métricas semejantes. Sin carga simultánea de todas las fuentes de todos los temas.
 
@@ -33,7 +33,7 @@ No usar dashboards con gráficos sin utilidad ni tarjetas de métricas decorativ
 |---|---|---|---|
 | Minimal | Ratio 1:1, grilla aireada, foto contenida | Precio claro, pocos adornos; accesorios/tecnología | Fase 1 |
 | Comercial | 1:1 o miniatura, densidad mayor, filas/grilla compacta | Búsqueda/categorías primero; precio y cantidad próximos | Fase 1 |
-| Boutique | 4:5, fotografía grande, serif opcional en títulos | Relato breve, producto protagonista; regalos/belleza | Fase 2; evaluar desde el diseño inicial |
+| Boutique | 4:5, fotografía grande, serif de sistema en títulos | Relato breve, producto protagonista; ropa/belleza/pastelería | Implementado |
 
 Un solo motor de catálogo: variantes de layout y tokens de espaciado/color/fuente/imagen. Comportamientos de precio, disponibilidad, carrito y errores idénticos. No duplicar tres páginas completas con lógica distinta. Boutique no debe enterrar buscador y primeras categorías debajo de varias pantallas de portada.
 

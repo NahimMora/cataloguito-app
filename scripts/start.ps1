@@ -28,5 +28,5 @@ $mvpLoopRunning=$false
 if(Test-Path -LiteralPath $mvpLoopFile){$mvpLoopId=[int](Get-Content $mvpLoopFile);$mvpLoopRunning=$null -ne (Get-Process -Id $mvpLoopId -ErrorAction SilentlyContinue)}
 if(-not $mvpLoopRunning){$mvpWorker=Start-Process powershell.exe -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',('"'+(Join-Path $PSScriptRoot 'outbox-loop.ps1')+'"')) -WorkingDirectory $mvpRoot -WindowStyle Hidden -PassThru;$mvpWorker.Id|Set-Content $mvpLoopFile}
 for($mvpWait=0;$mvpWait -lt 30;$mvpWait++){try{$mvpReady=Invoke-WebRequest "http://127.0.0.1:$Port/up" -UseBasicParsing -TimeoutSec 2;if($mvpReady.StatusCode -eq 200){break}}catch{Start-Sleep -Milliseconds 250}}
-Write-Host "Vitrina disponible en http://127.0.0.1:$Port" -ForegroundColor Green
+Write-Host "Cataloguito disponible en http://127.0.0.1:$Port" -ForegroundColor Green
 if(-not $NoBrowser){Start-Process "http://127.0.0.1:$Port"}

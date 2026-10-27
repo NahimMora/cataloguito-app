@@ -15,7 +15,9 @@ class OrderService
 
     public function create(Shop $shop, array $data, string $session): Order
     {
-        $phone = Phone::normalize($data['phone'], 'phone');
+        $phone = isset($data['phone_country'])
+            ? Phone::normalizeParts($data['phone_country'], $data['phone_local'] ?? '', 'phone_local')
+            : Phone::normalize($data['phone'], 'phone');
         $items = $data['items'];
         usort($items, fn ($a, $b) => strcmp($a['id'], $b['id']));
         $payloadHash = hash('sha256', json_encode([$items, trim($data['name']), $phone, trim($data['note'] ?? '')], JSON_THROW_ON_ERROR));

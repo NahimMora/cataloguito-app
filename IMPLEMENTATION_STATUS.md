@@ -6,7 +6,7 @@ Autorización: el fundador pidió implementar todo el MVP de fase 1 y dejarlo us
 
 - Registro/login/reset/verificación; crear y configurar un negocio.
 - Productos/categorías, foto segura, disponibilidad, archivo, precio rápido con concurrencia.
-- Publicación estable, dos temas y preview; catálogo público responsive, buscador, categorías, enlaces individuales.
+- Publicación estable, tres familias visuales y preview; siete muestras por rubro; catálogo público responsive, buscador, categorías y enlaces individuales.
 - Carrito local por tienda, cotización servidor, contacto mínimo, solicitud idempotente y WhatsApp revisable.
 - Panel de pedidos, estados e historial; aislamiento entre negocios.
 - Email desacoplado con reintentos; cuotas, exportación propia, cuenta y baja/pausa.
@@ -16,7 +16,7 @@ Autorización: el fundador pidió implementar todo el MVP de fase 1 y dejarlo us
 
 **MVP terminado y usable en local.** Todos los criterios anteriores están implementados. Laravel 13, PHP portátil 8.4.27 y MariaDB 11.8.9 exclusiva en puerto 3318. XAMPP no se modificó.
 
-Abrir `ABRIR_VITRINA.bat`. Aplicación: http://127.0.0.1:8000 . Catálogo: http://127.0.0.1:8000/casa-luma . Cuenta ficticia: `demo@vitrina.test` / `VitrinaDemo2026`. El teléfono de la demo es ficticio; configurar uno propio para WhatsApp. Los enlaces locales no funcionan fuera de esta computadora.
+Abrir `ABRIR_CATALOGUITO.bat`. Aplicación: http://127.0.0.1:8000 . Catálogo: http://127.0.0.1:8000/casa-luma . Cuenta ficticia: `demo@cataloguito.test` / `CataloguitoDemo2026`. El teléfono de la demo es ficticio; configurar uno propio para WhatsApp. Los enlaces locales no funcionan fuera de esta computadora.
 
 También se puede crear una cuenta propia. Verificación y recuperación se completan desde **Correo de desarrollo**, sin SMTP externo. El visor está restringido al usuario/sesión y loopback. Pedido registrado no significa mensaje enviado, venta realizada ni pago aprobado.
 
@@ -24,11 +24,11 @@ Extras incluidos: exportación CSV segura, archivo reversible, historial de pedi
 
 ## Verificación ejecutada
 
-- `npm run test:backend`: **30 pruebas, 166 aserciones**, incluida concurrencia real con dos procesos y aislamiento entre comercios.
-- `npm run test:e2e`: **2 recorridos aprobados**, alta/verificación/foto/precio/publicación/pedido/gestión y accesibilidad/teclado/móvil/escritorio.
-- `npm run build`: correcto. CSS 40,29 KB / 9,47 KB gzip; JS 58,94 KB / 21,02 KB gzip; fuente local 24,83 KB.
+- `npm run test:backend`: **34 pruebas, 198 aserciones**, incluida concurrencia real, aislamiento entre comercios, teléfonos por país, selección de estilo, errores de alta, robots y sitemap.
+- `npm run test:e2e`: **3 recorridos aprobados**, alta/verificación/foto/precio/publicación/pedido/gestión, accesibilidad/teclado/móvil/escritorio y landing/registro mobile-first.
+- `npm run build`: correcto. CSS 53,44 KB / 12,16 KB gzip; JS 59,11 KB / 21,07 KB gzip; fuente local 24,83 KB.
 - Laravel Pint aplicado. Backup restaurado en `vitrina_restore_test`, SQL y 24 archivos de imagen verificados con hashes.
-- Lighthouse móvil local: rendimiento **87**, accesibilidad **100**, SEO **100**; FCP 2,7 s, LCP 3,4 s, TBT 110 ms y CLS 0. Laboratorio sobre servidor de desarrollo, no Core Web Vitals reales ni garantía de producción. Informe `.tools/lighthouse.json`; repetir con `npm run test:performance`.
+- Lighthouse móvil local de la landing final: rendimiento **97**, accesibilidad **100**, SEO **100**; FCP 1,7 s, LCP 2,4 s, TBT 20 ms y CLS 0. Laboratorio sobre servidor de desarrollo, no Core Web Vitals reales ni garantía de producción. Informe `.tools/lighthouse.json`; repetir con `npm run test:performance`.
 - Axe no encontró infracciones en las reglas WCAG evaluadas; no sustituye una auditoría completa.
 
 Bases aisladas: `vitrina` uso local, `vitrina_test` backend, `vitrina_e2e` navegador y `vitrina_restore_test` restauración. Herramientas, secretos, datos e informes locales excluidos de Git. CI preparada, aún sin ejecución remota.
@@ -37,7 +37,7 @@ Bases aisladas: `vitrina` uso local, `vitrina_test` backend, `vitrina_e2e` naveg
 
 Configurar HTTPS, SMTP verificado, cron, respaldo externo cifrado, identidad legal/retención y monitoreo. Ejecutar aceptación sobre el hosting concreto y obtener autorización para producción. Ver `DEPLOYMENT.md`.
 
-Fuera de fase 1: cobros/suscripciones automáticas, importación XLSX, variantes, stock numérico, dominios propios, API de WhatsApp y tercera plantilla. El comando Pro manual no verifica pagos. Nombre Vitrina provisional.
+Fuera de fase 1: cobros/suscripciones automáticas, importación XLSX, variantes, stock numérico, dominios propios y API de WhatsApp. El comando Pro manual no verifica pagos. El nombre Cataloguito todavía requiere verificación marcaria y de dominio.
 
 ## Continuación ante límite del proveedor
 
@@ -45,6 +45,6 @@ Actualizar este archivo al cerrar cada bloque con lo terminado, comandos/resulta
 
 No se alcanzó un límite diario ni se programó una reanudación automática durante esta implementación.
 
-## Siguiente mejora solicitada
+## Estrategia Cataloguito completada
 
-El fundador pidió un plan para cambiar la marca a Cataloguito y mejorar landing, plantillas por rubro, registro, teléfonos, avisos y SEO. Investigación/diagnóstico y tareas concretas en `CATALOGUITO_PLAN.md`. Se creó el plan; la aplicación conserva su marca y comportamiento anteriores hasta ejecutar ese bloque. No confundir el documento de propuesta con cambios ya implementados.
+La estrategia de `CATALOGUITO_PLAN.md` quedó implementada y verificada: marca cálida con coral dominante, landing compacta e interactiva, siete muestras por rubro, familia Boutique, alta sin desplazamiento inicial innecesario, errores asociados a campos, teléfonos con país separado y Argentina por defecto, avisos corregidos, fotografías originales y base SEO técnica/editorial.

@@ -1,5 +1,5 @@
 @props(['title' => 'Mi negocio', 'subtitle' => ''])
-<x-base :title="$title . ' · Vitrina'">
+<x-base :title="$title . ' · Cataloguito'">
     <div class="app-shell">
         <aside class="sidebar">
             <div class="sidebar-brand"><x-brand /><span class="workspace-label">TU ESPACIO DE VENTAS</span></div>

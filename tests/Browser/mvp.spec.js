@@ -31,7 +31,7 @@ test("un comercio publica, actualiza, recibe y gestiona un pedido desde el celul
         .fill(slug);
     await page
         .getByLabel("WhatsApp del negocio", { exact: true })
-        .fill("5491100000000");
+        .fill("11 0000 0000");
     await page.getByRole("button", { name: "Crear mi espacio" }).click();
     await page.goto("/dev/mail");
     const verifyUrl = await page
@@ -103,7 +103,7 @@ test("un comercio publica, actualiza, recibe y gestiona un pedido desde el celul
     await shop
         .getByLabel("Tu nombre", { exact: true })
         .fill("Comprador Piloto");
-    await shop.getByLabel("Tu WhatsApp", { exact: true }).fill("5491100000000");
+    await shop.getByLabel("Tu WhatsApp", { exact: true }).fill("11 0000 0000");
     await shop
         .getByRole("button", { name: "Confirmar solicitud", exact: true })
         .click();
@@ -131,7 +131,7 @@ test("un comercio publica, actualiza, recibe y gestiona un pedido desde el celul
     await page.getByRole("link", { name: "Ver correos de desarrollo" }).click();
     // Cron is checked independently; account mail already proved verification without external SMTP.
     await expect(
-        page.getByRole("heading", { name: "Verificá tu email · Vitrina" }),
+        page.getByRole("heading", { name: "Verificá tu email · Cataloguito" }),
     ).toBeVisible();
     await buyer.close();
     expect(errors).toEqual([]);
@@ -182,4 +182,30 @@ test("la demo es navegable, accesible y sin desbordamiento en ambos tamaños", a
     await expect(page.getByRole("dialog")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog")).not.toBeVisible();
+});
+
+test("la landing y el registro mobile muestran plantillas y errores claros", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/");
+    await expect(page.getByRole("heading", { name: /Tu catálogo online/ })).toBeVisible();
+    await expect(page.getByRole("tab")).toHaveCount(7);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.getByRole("tab", { name: "Tienda de ropa" }).click();
+    await expect(page.getByRole("heading", { name: "Hilo", exact: true })).toBeVisible();
+    await page.waitForTimeout(250);
+    const landingAxe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    expect(landingAxe.violations.map((violation) => violation.id)).toEqual([]);
+
+    await page.goto("/register");
+    const buttonBottom = await page.getByRole("button", { name: "Crear mi cuenta" }).evaluate((button) => button.getBoundingClientRect().bottom);
+    expect(buttonBottom).toBeLessThanOrEqual(667);
+    await expect(page.getByLabel("País")).toHaveCount(0);
+    await page.getByLabel("Tu nombre", { exact: true }).fill("Persona prueba");
+    await page.getByLabel("Email", { exact: true }).fill("registro@example.test");
+    await page.getByLabel("Contraseña", { exact: true }).fill("Password12345");
+    await page.getByLabel("Repetí la contraseña", { exact: true }).fill("Password54321");
+    await page.getByRole("checkbox").check();
+    await page.getByRole("button", { name: "Crear mi cuenta" }).click();
+    await expect(page.locator("#password-error")).toHaveText("Las contraseñas no coinciden.");
+    await expect(page.getByLabel("Contraseña", { exact: true })).toHaveAttribute("aria-invalid", "true");
 });
