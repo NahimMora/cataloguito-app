@@ -1,0 +1,56 @@
+name: MVP checks
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ROOT_PASSWORD: root-test
+          MARIADB_DATABASE: vitrina_test
+          MARIADB_USER: vitrina
+          MARIADB_PASSWORD: vitrina-test-pass
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USERNAME: vitrina
+      DB_PASSWORD: vitrina-test-pass
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, gd, intl, mbstring, zip, exif
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: composer install --no-interaction --prefer-dist
+      - run: npm ci
+      - run: npm run build
+      - run: cp .env.example .env && php artisan key:generate
+      - run: php vendor/bin/pint --test
+      - run: php artisan test --compact
+      - name: Prepare isolated browser database
+        env:
+          MYSQL_PWD: root-test
+        run: |
+          mysql -h127.0.0.1 -uroot -e "CREATE DATABASE vitrina_e2e CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL ON vitrina_e2e.* TO 'vitrina'@'%';"
+          cp .env .env.e2e
+          sed -i 's/DB_DATABASE=vitrina/DB_DATABASE=vitrina_e2e/;s|APP_URL=.*|APP_URL=http://127.0.0.1:8001|;s/MAIL_MAILER=log/MAIL_MAILER=array/' .env.e2e
+          php artisan migrate --env=e2e --force
+          php artisan db:seed --class=DemoSeeder --env=e2e
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-checks
+          path: test-results/
