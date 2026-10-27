@@ -84,6 +84,7 @@ Propuesta comercial: piloto limitado, luego Gratis y Pro. Pro a ARS 7.900/mes co
 | [ROADMAP.md](ROADMAP.md) | Cinco fases, estimaciones, responsables, criterios y riesgos |
 | [AGENTS.md](AGENTS.md) | Reglas compartidas para trabajo posterior autorizado |
 | [CLAUDE.md](CLAUDE.md) | Importación de las reglas compartidas y orientación de frontend |
+| [CATALOGUITO_PLAN.md](CATALOGUITO_PLAN.md) | Plan solicitado de nueva marca, landing móvil, siete estilos, formularios, avisos y SEO; todavía sin ejecutar |
 
 ## Qué se verificó
 

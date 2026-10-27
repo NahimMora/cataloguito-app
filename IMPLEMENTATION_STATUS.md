@@ -44,3 +44,7 @@ Fuera de fase 1: cobros/suscripciones automáticas, importación XLSX, variantes
 Actualizar este archivo al cerrar cada bloque con lo terminado, comandos/resultados y siguiente acción concreta. No afirmar que una reanudación automática está programada si la aplicación no brinda esa capacidad. Una sesión reanudada debe leer primero este documento y AGENTS.md, revisar git status y continuar sin rehacer trabajo.
 
 No se alcanzó un límite diario ni se programó una reanudación automática durante esta implementación.
+
+## Siguiente mejora solicitada
+
+El fundador pidió un plan para cambiar la marca a Cataloguito y mejorar landing, plantillas por rubro, registro, teléfonos, avisos y SEO. Investigación/diagnóstico y tareas concretas en `CATALOGUITO_PLAN.md`. Se creó el plan; la aplicación conserva su marca y comportamiento anteriores hasta ejecutar ese bloque. No confundir el documento de propuesta con cambios ya implementados.
